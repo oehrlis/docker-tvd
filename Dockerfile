@@ -4,8 +4,8 @@
 # ----------------------------------------------------------------------
 # Name.......: Dockerfile 
 # Author.....: Stefan Oehrli (oes) stefan.oehrli@trivadis.com
-# Editor.....: 
-# Date.......: 
+# Editor.....: Stefan Oehrli
+# Date.......: 2017.09.22
 # Revision...: 
 # Purpose....: Dockerfile to build a base image for oud, wls and oudsm
 # Notes......: --
@@ -15,7 +15,6 @@
 # Modified...:
 # see git revision history for more information on changes/updates
 # TODO.......:
-# - avoid temporary oud jar file in image
 # - add oud or base env
 # ----------------------------------------------------------------------
 
@@ -30,37 +29,40 @@ MAINTAINER Stefan Oehrli <stefan.oehrli@trivadis.com>
 #Common ENV
 # ----------------------------------------------------------------------
 ENV ORACLE_ROOT=/u00 \
-    ORACLE_BASE=/u00/oracle
+    ORACLE_DATA=/u01 \
+    ORACLE_BASE=/u00/app/oracle
 
-#/u00
-#/u00/app/
-#ORACLE_BASE=/u00/app/oracle
-#BE_ORA_ADMIN=/u00/app/oracle/admin
-#/u00/app/oracle/audit
-#/u00/app/oracle/cfgtoollogs
-#/u00/app/oracle/diag
-#/u00/app/oracle/etc
-#/u00/app/oracle/local
-#/u00/app/oracle/network
-#/u00/app/oracle/product
-
-#/u00/app/oraInventory
-
-#/u01
-
-ENV ORACLE_HOME=$ORACLE_BASE/$ORACLE_HOME_NAME \
-    OUI_RSP=$ORACLE_BASE/etc/install.rsp \
-    OUI_LOC=$ORACLE_BASE/etc/oraInst.loc 
-
-# Setup subdirectory for FMW install package and container-scripts
+# Setup user, directory and update yum packages
 # ----------------------------------------------------------------------
-RUN mkdir -p $ORACLE_ROOT && \ 
-    chmod a+xr $ORACLE_ROOT && \
+RUN mkdir -p $ORACLE_ROOT $ORACLE_DATA $ORACLE_BASE && \ 
+    chmod a+xr $ORACLE_ROOT $ORACLE_DATA && \
+
+# create oracle groups
+    groupadd --gid 1000 oinstall && \
+    groupadd --gid 1010 osdba && \
+    groupadd --gid 1020 osoper && \
+    groupadd --gid 1030 osbackupdba && \
+    groupadd --gid 1040 oskmdba && \
+    groupadd --gid 1050 osdgdba && \
+
 # create oracle user
-    useradd -b $ORACLE_ROOT -d $ORACLE_BASE -m -s /bin/bash oracle && \
-    chown oracle:oracle -R $ORACLE_ROOT && \
-# install util-linux, libaio and update OS
-    yum install -y oracle-database-server-12cR2-preinstall libaio util-linux && \
+    useradd --create-home --gid oinstall --shell /bin/bash \
+        --groups oinstall,osdba,osoper,osbackupdba,osdgdba,oskmdba \
+        oracle && \
+
+# create oracle directories
+    mkdir -p $ORACLE_BASE/etc $ORACLE_BASE/local && \
+    chown oracle:oinstall -R $ORACLE_ROOT $ORACLE_DATA && \
+
+# create an oraInst.loc file
+    echo "inventory_loc=$ORACLE_BASE/oraInventory" > $ORACLE_BASE/etc/oraInst.loc && \
+    echo "inst_group=oinstall" >> $ORACLE_BASE/etc/oraInst.loc && \
+
+# update existing packages
+    yum upgrade -y && \
+# install util-linux, libaio, perl and Oracle 12.2 PreInstall 
+    yum install -y oracle-database-server-12cR2-preinstall \
+        libaio perl perl-core perl-IO-Socket-SSL util-linux && \
     yum clean all && \
     rm -rf /var/cache/yum
 
@@ -68,21 +70,7 @@ RUN mkdir -p $ORACLE_ROOT && \
 # ----------------------------------------------------------------------
 USER oracle
 
-RUN  mkdir -p $ORACLE_BASE/etc $ORACLE_BASE/local $ORACLE_BASE/instances && \
-
-# create an oraInst.loc file
-    echo "inventory_loc=$ORACLE_BASE/oraInventory" > $OUI_LOC && \
-    echo "inst_group=oinstall" >> $OUI_LOC && \
-
-# create a response file
-    echo "[ENGINE]" > $OUI_RSP && \
-    echo "Response File Version=1.0.0.0.0" >> $OUI_RSP && \
-    echo "[GENERIC]" >> $OUI_RSP && \
-    echo "DECLINE_SECURITY_UPDATES=true" >> $OUI_RSP && \
-    echo "SECURITY_UPDATES_VIA_MYORACLESUPPORT=false" >> $OUI_RSP
-
-VOLUME ["$ORACLE_BASE/instances"]
-WORKDIR ${ORACLE_HOME}
+VOLUME ["$ORACLE_DATA"]
 
 # Define default command to start script.
 # overwrite this with 'CMD []' in a dependent Dockerfile
