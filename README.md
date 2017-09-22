@@ -22,8 +22,6 @@ The purpose of this image is provide common base image for any kind of engineeri
 
    * [oehrlis/docker-oud](https://github.com/oehrlis/docker-oud)
 
-Due to [OTN Developer License Terms](http://www.oracle.com/technetwork/licenses/standard-license-152015.html) I cannot make this image available on a public Docker registry.
-    
 ## Environment Variable and Directories
 
 The following environment variable have been used for the installation:
@@ -43,6 +41,6 @@ Please file your bug reports, enhancement requests, questions and other support 
 
 ## License
 
-docker-oddgendemo is licensed under the Apache License, Version 2.0. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>. 
+docker-tvd is licensed under the Apache License, Version 2.0. You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>. 
 
 See [OTN Developer License Terms](http://www.oracle.com/technetwork/licenses/standard-license-152015.html) and [Oracle Database Licensing Information User Manual](https://docs.oracle.com/database/122/DBLIC/Licensing-Information.htm#DBLIC-GUID-B6113390-9586-46D7-9008-DCC9EDA45AB4) regarding Oracle Database licenses.
