@@ -32,6 +32,22 @@ MAINTAINER Stefan Oehrli <stefan.oehrli@trivadis.com>
 ENV ORACLE_ROOT=/u00 \
     ORACLE_BASE=/u00/oracle
 
+#/u00
+#/u00/app/
+#ORACLE_BASE=/u00/app/oracle
+#BE_ORA_ADMIN=/u00/app/oracle/admin
+#/u00/app/oracle/audit
+#/u00/app/oracle/cfgtoollogs
+#/u00/app/oracle/diag
+#/u00/app/oracle/etc
+#/u00/app/oracle/local
+#/u00/app/oracle/network
+#/u00/app/oracle/product
+
+#/u00/app/oraInventory
+
+#/u01
+
 ENV ORACLE_HOME=$ORACLE_BASE/$ORACLE_HOME_NAME \
     OUI_RSP=$ORACLE_BASE/etc/install.rsp \
     OUI_LOC=$ORACLE_BASE/etc/oraInst.loc 
@@ -43,8 +59,8 @@ RUN mkdir -p $ORACLE_ROOT && \
 # create oracle user
     useradd -b $ORACLE_ROOT -d $ORACLE_BASE -m -s /bin/bash oracle && \
     chown oracle:oracle -R $ORACLE_ROOT && \
-# install libaio and update OS
-    yum install -y libaio && \
+# install util-linux, libaio and update OS
+    yum install -y oracle-database-server-12cR2-preinstall libaio util-linux && \
     yum clean all && \
     rm -rf /var/cache/yum
 
