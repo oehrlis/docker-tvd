@@ -17,4 +17,4 @@
 # see git revision history for more information on changes/updates
 # TODO.......:
 # -----------------------------------------------------------------------------
-docker build -t oehrlis/oud .
+docker build -t oehrlis/tvd .

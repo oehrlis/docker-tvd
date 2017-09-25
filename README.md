@@ -28,9 +28,10 @@ The following environment variable have been used for the installation:
 
 Environment variable | Value / Directories | Comment
 -------------------- | ------------------- | ---------------
-ORACLE_ROOT | ```/u00``` | Root directory for all the Oracle software
-ORACLE_DATA | ```/u01``` | Root directory for the persistent data eg. database, OUD instances etc. A docker volumes is defined for /u01
-ORACLE_BASE | ```/u00/app/oracle``` | Oracle base directory
+ORACLE_ROOT          | ```/u00``` | Root directory for all the Oracle software
+ORACLE_DATA          | ```/u01``` | Root directory for the persistent data eg. database, OUD instances etc. A docker volumes is defined for /u01
+ORACLE_BASE          | ```/u00/app/oracle``` | Oracle base directory
+DOCKER_BIN           | ```/opt/docker/bin``` | Docker build and setup scripts
 
 ## Issues
 

@@ -32,7 +32,7 @@ groupadd --gid 1010 osdba
 groupadd --gid 1020 osoper
 groupadd --gid 1030 osbackupdba
 groupadd --gid 1040 oskmdba
-groupadd --gid 1050 osdgdba && \
+groupadd --gid 1050 osdgdba
 
 # create oracle user
 useradd --create-home --gid oinstall --shell /bin/bash \
@@ -52,19 +52,26 @@ mkdir -p $ORACLE_BASE/local
 mkdir -p $ORACLE_BASE/network       # softlink to volume
 mkdir -p $ORACLE_BASE/product
 
-# change permissions and ownership
-chmod a+xr $ORACLE_ROOT $ORACLE_DATA
-chown oracle:oinstall -R $ORACLE_ROOT $ORACLE_DATA
-
 # create an oraInst.loc file
 echo "inventory_loc=$ORACLE_BASE/oraInventory" > $ORACLE_BASE/etc/oraInst.loc
 echo "inst_group=oinstall" >> $ORACLE_BASE/etc/oraInst.loc
+
+# create a generic response file for OUD/WLS
+echo "[ENGINE]" > $ORACLE_BASE/etc/install.rsp
+echo "Response File Version=1.0.0.0.0" >> $ORACLE_BASE/etc/install.rsp
+echo "[GENERIC]" >> $ORACLE_BASE/etc/install.rsp
+echo "DECLINE_SECURITY_UPDATES=true" $ORACLE_BASE/etc/install.rsp
+echo "SECURITY_UPDATES_VIA_MYORACLESUPPORT=false" >> $ORACLE_BASE/etc/install.rsp
+
+# change permissions and ownership
+chmod a+xr $ORACLE_ROOT $ORACLE_DATA
+chown oracle:oinstall -R $ORACLE_ROOT $ORACLE_DATA
 
 # update existing packages
 yum upgrade -y
 
 # install basic packages util-linux, libaio 
-yum install -y libaio util-linux
+yum install -y libaio util-linux hostname which tar sudo
 
 # intall oracle preinstall package
 #yum install -y oracle-database-server-12cR2-preinstall

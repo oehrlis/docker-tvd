@@ -25,8 +25,8 @@ FROM oraclelinux:7-slim
 # Maintainer
 # ----------------------------------------------------------------------
 MAINTAINER Stefan Oehrli <stefan.oehrli@trivadis.com>
-# copy all scripts
 
+# copy all scripts
 ADD scripts /opt/docker/bin/
 
 # image setup via shell script to reduce layers and optimize final disk usage
