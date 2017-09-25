@@ -71,7 +71,7 @@ chown oracle:oinstall -R $ORACLE_ROOT $ORACLE_DATA
 yum upgrade -y
 
 # install basic packages util-linux, libaio 
-yum install -y libaio util-linux hostname which tar sudo
+yum install -y libaio util-linux hostname which unzip zip tar sudo
 
 # intall oracle preinstall package
 #yum install -y oracle-database-server-12cR2-preinstall
