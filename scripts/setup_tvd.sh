@@ -43,13 +43,7 @@ useradd --create-home --gid oinstall --shell /bin/bash \
 mkdir -p $ORACLE_ROOT
 mkdir -p $ORACLE_DATA
 mkdir -p $ORACLE_BASE
-mkdir -p $ORACLE_BASE/admin         # softlink to volume
-mkdir -p $ORACLE_BASE/audit         # softlink to volume
-mkdir -p $ORACLE_BASE/cfgtoollogs
-mkdir -p $ORACLE_BASE/diag          # softlink to volume
-mkdir -p $ORACLE_BASE/etc           # softlink to volume
 mkdir -p $ORACLE_BASE/local
-mkdir -p $ORACLE_BASE/network       # softlink to volume
 mkdir -p $ORACLE_BASE/product
 
 # create an oraInst.loc file
@@ -73,11 +67,17 @@ yum upgrade -y
 # install basic packages util-linux, libaio 
 yum install -y libaio util-linux hostname which unzip zip tar sudo
 
+# add oracle to the sudoers
+echo "oracle  ALL=(ALL)   NOPASSWD: ALL" >>/etc/sudoers
+
 # intall oracle preinstall package
-#yum install -y oracle-database-server-12cR2-preinstall
+yum install -y oracle-database-server-12cR2-preinstall
 
 # install perl packages
-#yum install -y perl perl-core perl-IO-Socket-SSL \
+yum install -y perl perl-core perl-IO-Socket-SSL \
+
+# add oracle to the sudoers
+echo "oracle  ALL=(ALL)   NOPASSWD: ALL" >>/etc/sudoers
 
 # clean up
 yum clean all
