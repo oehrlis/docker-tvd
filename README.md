@@ -42,13 +42,6 @@ ORACLE_BASE          | ```/u00/app/oracle```       | Oracle base directory
 n/a                  | ```$ORACLE_BASE/product```  | Oracle product base directory
 ORACLE_BASE          | ```$ORACLE_BASE/local```    | Oracle base directory
 ORACLE_DATA          | ```/u01```                  | Root directory for the persistent data eg. database, OUD instances etc. A docker volumes must be defined for /u01
-INSTANCE_HOME        | ```$ORACLE_DATA/instances```| Location for the OUD instances
-DOMAIN_HOME          | ```$ORACLE_DATA/domains```  | Location for the WLS domains
-DOWNLOAD             | ```/tmp/download```         | Temporary download directory, will be removed after build
-ORACLE_HOME_NAME     | ```fmw12.2.1.3.0```         | Name of the Oracle Home, used to create to PATH to ORACLE_HOME eg. *$ORACLE_BASE/product/$ORACLE_HOME_NAME*
-DOCKER_BIN           | ```/opt/docker/bin```       | Docker build and setup scripts
-JAVA_DIR             | ```/usr/java```             | Base directory for java home location
-JAVA_HOME            | ```$JAVA_DIR/jdk1.8.0_144```| Java home directory
 
 ## Installation and build
 The docker image can be build manually based on [oehrlis/docker-tvd](https://github.com/oehrlis/docker-tvd) from GitHub or pull from the public repository [oehrlis/tvd](https://hub.docker.com/r/oehrlis/tvd/) on DockerHub.
