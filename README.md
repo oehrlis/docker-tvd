@@ -32,16 +32,15 @@ The docker image can be build manually based on [oehrlis/docker-tvd](https://git
 
 * Manual build the image based on the source from GitHub ([oehrlis/docker-tvd](https://github.com/oehrlis/docker-tvd)).
 
-		docker build -t trivadis/tvdbase .
+        docker build -t trivadis/tvdbase .
 
 * Pull the image from Docker hub.
 
-		docker pull oehrlis/tvd
+        docker pull trivadis/tvdbase
 
 * Create a new named container and run it interactive (-i -t)
 
-		docker run -v [<host mount point>:]/u01 --name TVD-engineering oehrlis/tvd
-		docker start -ai TVD-engineering
+        docker run -v [<host mount point>:]/u01 --name ttc trivadis/tvdbase
 
 ## Issues
 
