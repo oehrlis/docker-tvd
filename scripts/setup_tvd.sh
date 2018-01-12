@@ -47,6 +47,7 @@ install --owner oracle --group oinstall --mode=775 --verbose --directory \
     ${ORACLE_ROOT} \
     ${ORACLE_DATA} \
     ${ORACLE_BASE}/etc \
+    ${ORACLE_BASE}/network \
     ${ORACLE_BASE}/network/admin \
     ${ORACLE_BASE}/local \
     ${ORACLE_BASE}/product
