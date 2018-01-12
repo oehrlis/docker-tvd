@@ -19,7 +19,6 @@
 # ----------------------------------------------------------------------
 
 # ignore secure linux (not available on slim linux
-#setenforce Permissive
 
 # define environment variables
 export ORACLE_ROOT=/u00             # oracle root directory
@@ -39,45 +38,24 @@ useradd --create-home --gid oinstall --shell /bin/bash \
     --groups oinstall,osdba,osoper,osbackupdba,osdgdba,oskmdba \
     oracle
 
+# remove the copies of the group and password files
+rm /etc/group- /etc/gshadow- /etc/passwd- /etc/shadow-
+
+echo "--- Create OFA directory structure"
 # create oracle directories
-mkdir -p $ORACLE_ROOT
-mkdir -p $ORACLE_DATA
-mkdir -p $ORACLE_BASE
-mkdir -p $ORACLE_BASE/local
-mkdir -p $ORACLE_BASE/product
+install --owner oracle --group oinstall --mode=775 --verbose --directory \
+    ${ORACLE_ROOT} \
+    ${ORACLE_DATA} \
+    ${ORACLE_BASE}/etc \
+    ${ORACLE_BASE}/network/admin \
+    ${ORACLE_BASE}/local \
+    ${ORACLE_BASE}/product
 
-# create an oraInst.loc file
-echo "inventory_loc=$ORACLE_BASE/oraInventory" > $ORACLE_BASE/etc/oraInst.loc
-echo "inst_group=oinstall" >> $ORACLE_BASE/etc/oraInst.loc
-
-# create a generic response file for OUD/WLS
-echo "[ENGINE]" > $ORACLE_BASE/etc/install.rsp
-echo "Response File Version=1.0.0.0.0" >> $ORACLE_BASE/etc/install.rsp
-echo "[GENERIC]" >> $ORACLE_BASE/etc/install.rsp
-echo "DECLINE_SECURITY_UPDATES=true" $ORACLE_BASE/etc/install.rsp
-echo "SECURITY_UPDATES_VIA_MYORACLESUPPORT=false" >> $ORACLE_BASE/etc/install.rsp
-
-# change permissions and ownership
-chmod a+xr $ORACLE_ROOT $ORACLE_DATA
-chown oracle:oinstall -R $ORACLE_ROOT $ORACLE_DATA
+# limit locale to the different english languages
+echo "%_install_langs   en_US" >/etc/rpm/macros.lang
 
 # update existing packages
 yum upgrade -y
-
-# install basic packages util-linux, libaio 
-yum install -y libaio util-linux hostname which unzip zip tar sudo
-
-# add oracle to the sudoers
-echo "oracle  ALL=(ALL)   NOPASSWD: ALL" >>/etc/sudoers
-
-# intall oracle preinstall package
-yum install -y oracle-database-server-12cR2-preinstall
-
-# install perl packages
-yum install -y perl perl-core perl-IO-Socket-SSL \
-
-# add oracle to the sudoers
-echo "oracle  ALL=(ALL)   NOPASSWD: ALL" >>/etc/sudoers
 
 # clean up
 yum clean all
