@@ -34,6 +34,7 @@ ARG ORACLE_BASE
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
 ENV DOWNLOAD="/tmp/download" \
+    DOCKER_SCRIPTS="/opt/docker/bin" \
     ORACLE_ROOT=${ORACLE_ROOT:-/u00} \
     ORACLE_DATA=${ORACLE_DATA:-/u01}
 
